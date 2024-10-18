@@ -6,6 +6,7 @@ use std::{env::var, path::PathBuf};
 /// way that CEF links at compile time and at runtime.
 pub const CEF_WORKSPACE_DIR: &str = "CEF_WORKSPACE_DIR";
 pub const CEF_ARTIFACTS_DIR: &str = "CEF_ARTIFACTS_DIR";
+pub const CEF_CUSTOM_FOLDER: &str = "CEF_CUSTOM_FOLDER";
 
 /// The cef directory within the artifacts dir.
 pub const CEF_DIRECTORY: &str = "cef";
@@ -23,9 +24,18 @@ pub fn get_cef_target_dir(profile: &str) -> Result<PathBuf> {
         false => profile
     };
 
-    Ok(get_cef_workspace_dir()?
+    let dir = get_cef_workspace_dir()?
         .join("target")
-        .join(profile))
+        .join(profile);
+
+    let custom_dir = var(CEF_CUSTOM_FOLDER);
+
+
+    if custom_dir.is_ok() {
+        return Ok(dir.join(custom_dir?));
+    }
+
+    Ok(dir)
 }
 
 /// Get the artifacts dir. Only call within build.rs!
