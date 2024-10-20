@@ -1,38 +1,59 @@
-use crate::{download_file, extract_tar_gz};
+use crate::{download_file, extract_bz2};
 use anyhow::Result;
-use std::{
-    env::consts::{ARCH, OS},
-    fs::create_dir_all,
-    path::Path
-};
+use std::{fs::create_dir_all, path::Path};
+use std::path::PathBuf;
 
-/// The current CEF version.
-pub const CEF_VERSION: &str = "v0.1.0";
+const CEF_VERSION: &str = "130.1.2+g48f3ef6+chromium-130.0.6723.44_windows64";
 
-/// Returns the platform-specific CEF artifacts url.
+pub fn get_cef_artifacts_name() -> String {
+    format!("cef_binary_{}_minimal", CEF_VERSION)
+}
+
 pub fn get_cef_url() -> String {
     format!(
-        "https://github.com/hytopiagg/cef-ui/releases/download/cef-artifacts-{}/cef-{}-{}.tgz",
-        CEF_VERSION, OS, ARCH
+        "https://cef-builds.spotifycdn.com/cef_binary_{}_minimal.tar.bz2",
+        CEF_VERSION,
     )
 }
 
 /// Downloads the tarball, untars it, and decompresses it. If the
 /// target directory exists, then this function does nothing.
-pub fn download_and_extract_cef(dir: &Path) -> Result<()> {
+pub fn download_and_extract_cef(dir: &Path) -> Result<CefDir> {
     let url = get_cef_url();
 
-    if dir.exists() {
-        return Ok(());
+    if !dir.exists() {
+        create_dir_all(dir)?;
     }
 
-    // Create the new directory.
-    create_dir_all(dir)?;
+    let extracted = dir.join(get_cef_artifacts_name());
 
-    let path = dir.join("cef.tgz");
+    if extracted.exists() {
+        return Ok(CefDir { path: extracted });
+    }
 
-    download_file(&url, &path)?;
-    extract_tar_gz(&path, dir)?;
+    let cef_file_name = format!("{}.tar.bz2", get_cef_artifacts_name());
 
-    Ok(())
+    let path = dir.join(cef_file_name);
+
+    if !path.exists() {
+        download_file(&url, &path)?;
+    }
+
+    extract_bz2(&path, dir)?;
+
+    Ok(CefDir { path: extracted })
+}
+
+pub struct CefDir {
+    path: PathBuf,
+}
+
+impl CefDir {
+    pub fn get_release_dir(&self) -> PathBuf {
+        self.path.join("Release")
+    }
+
+    pub fn get_resources_dir(&self) -> PathBuf {
+        self.path.join("Resources")
+    }
 }

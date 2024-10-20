@@ -38,9 +38,3 @@ The simple examples are built via binary targets in `cef-ui-tools`. On macOS, th
 ## Status
 
 This is a work in progress and is not complete. Many `C` types have not yet been wrapped. At present, we target version `121.3.15+g4d3b0b4+chromium-121.0.6167.184`.
-
-| Platform | Arch | Builds | Downloads |
-| --- | --- | :---: | --- |
-| Linux | `x86_64` | :heavy_check_mark: | [cef_binary_121.3.15+g4d3b0b4+chromium-121.0.6167.184_linux64_minimal](https://cef-builds.spotifycdn.com/cef_binary_121.3.15%2Bg4d3b0b4%2Bchromium-121.0.6167.184_linux64_minimal.tar.bz2) |
-| macOS | `arm64` | :heavy_check_mark: | [cef_binary_121.3.15+g4d3b0b4+chromium-121.0.6167.184_macosarm64_minimal](https://cef-builds.spotifycdn.com/cef_binary_121.3.15%2Bg4d3b0b4%2Bchromium-121.0.6167.184_macosarm64_minimal.tar.bz2)
-| Windows | `x86_64` | :heavy_check_mark: | [cef_binary_121.3.15+g4d3b0b4+chromium-121.0.6167.184_windows64_minimal](https://cef-builds.spotifycdn.com/cef_binary_121.3.15%2Bg4d3b0b4%2Bchromium-121.0.6167.184_windows64_minimal.tar.bz2) |

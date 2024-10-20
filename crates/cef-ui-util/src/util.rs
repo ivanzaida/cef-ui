@@ -61,6 +61,12 @@ pub fn extract_tar_gz(file: &Path, dir: &Path) -> Result<()> {
     Ok(())
 }
 
+/// Delete a file.
+pub fn delete_file(file: &Path) -> Result<()> {
+    fs::remove_file(file)?;
+    Ok(())
+}
+
 /// Extract a bzip2 file.
 pub fn extract_bz2(file: &Path, dir: &Path) -> Result<()> {
     let file = File::open(file)?;

@@ -262,7 +262,7 @@ fn try_main() -> Result<()> {
 
 /// Ensure the root cache directory exists.
 pub fn get_root_cache_dir() -> Result<PathBuf> {
-    let path = PathBuf::from("/tmp/cef-ui-simple");
+    let path = PathBuf::from("./cache/cef-ui-simple");
     if !path.exists() {
         create_dir_all(&path)?;
     }
